@@ -1,13 +1,22 @@
 "use server";
 
 import User from "@/lib/modals/user.modal";
-import { connect } from "@/lib/db";
+import { connectDB } from "@/lib/db";
 
 export async function createUser(user: any) {
   try {
-    await connect();
+    await connectDB();
     const newUser = await User.create(user);
     return JSON.parse(JSON.stringify(newUser));
+  } catch (error) {
+    console.log(error);
+  }
+}
+export async function getUserByEmail(email: string) {
+  try {
+    await connectDB();
+    const user = await User.findOne({ email }).lean();
+    return user;
   } catch (error) {
     console.log(error);
   }
